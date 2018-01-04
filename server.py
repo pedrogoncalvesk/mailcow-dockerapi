@@ -9,7 +9,7 @@ import time
 import os
 
 
-docker_client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+docker_client = docker.DockerClient(base_url='unix://var/run/docker.sock', version='auto')
 app = Flask(__name__)
 api = Api(app)
 
