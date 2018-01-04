@@ -6,6 +6,8 @@ from threading import Thread
 import docker
 import signal
 import time
+import os
+
 
 docker_client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 app = Flask(__name__)
@@ -95,7 +97,14 @@ class GracefulKiller:
     self.kill_now = True
 
 def startFlaskAPI():
-  app.run(debug=False, host='0.0.0.0', port='8080', threaded=True)
+  port = 8080
+  bind = '0.0.0.0'
+  
+  if "DOCKERAPI_PORT" in os.environ:
+    port = int(os.environ["DOCKERAPI_PORT"])
+  if "DOCKERAPI_BIND" in os.environ:
+    bind = os.environ["DOCKERAPI_BIND"]
+  app.run(debug=False, host=bind, port=port, threaded=True)
 
 api.add_resource(containers_get, '/containers/json')
 api.add_resource(container_get, '/containers/<string:container_id>/json')
