@@ -7,4 +7,6 @@ RUN pip install docker flask flask-restful
 
 COPY server.py /
 
+RUN chmod +x /server.py
+
 CMD ["python2", "-u", "/server.py"]
